@@ -1,0 +1,48 @@
+/* Unoptimized : O(nlogn) */
+
+class Solution {
+public:
+    string frequencySort(string s) {
+        
+      unordered_map <char,int> m1;
+        
+      for(int i=0;i<s.size();i++)
+      {
+         if(m1.count(s[i]) == 0)
+          m1[s[i]]=1;
+         else
+          m1[s[i]]++;   
+      }
+      multimap <int,char,greater <int> > m2;
+      for(auto it=m1.begin();it!=m1.end();it++)
+           m2.insert(make_pair(it->second,it->first));    
+      
+      string ans;
+      for(auto it=m2.begin();it!=m2.end();it++)
+      {
+         for(int i=0;i<it->first;i++)
+          ans.push_back(it->second);   
+      }
+      return ans;  
+    }
+};
+
+/* Optimized : O(n) */
+
+string frequencySort(string s) {
+	vector<pair<int,int>> freq(256);
+	for(auto c:s) {
+		freq[c].first++;
+		freq[c].second = c;
+	}
+	// fixed size small size array sorted is sorted so constant time sorting
+	sort(freq.begin(),freq.end(), greater<pair<int,int>> ());
+	string ans;
+	for(int i = 0; i < 256; i++){
+		while(freq[i].first > 0){
+			ans += freq[i].second;
+			freq[i].first--;
+		}
+	}
+	return ans;
+}
