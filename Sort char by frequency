@@ -29,6 +29,8 @@ public:
 
 /* Optimized : O(n) */
 
+class Solution {
+public:
 string frequencySort(string s) {
 	vector<pair<int,int>> freq(256);
 	for(auto c:s) {
