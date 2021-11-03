@@ -1,0 +1,14 @@
+vector<string> answer;
+
+void getStrings( string s, int digitsLeft )
+{
+   if( digitsLeft == 0 ) // the length of string is n
+      answer.push_back( s );
+   else
+   {
+      getStrings( s + "0", digitsLeft - 1 );
+      getStrings( s + "1", digitsLeft - 1 );
+   }
+}
+
+getStrings( "", n ); // initial call
