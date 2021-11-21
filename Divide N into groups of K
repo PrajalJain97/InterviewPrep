@@ -3,6 +3,8 @@
 // groups such that each group
 // has K number of elements
 
+// Similar Problem: https://www.geeksforgeeks.org/count-number-of-ways-to-partition-a-set-into-k-subsets/
+
 #include <bits/stdc++.h>
 
 using namespace std;
