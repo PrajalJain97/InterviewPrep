@@ -1,0 +1,64 @@
+/*
+You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
+Return true if you can reach the last index, or false otherwise.
+*/
+
+/* Unoptimized Approach using DP : (Time Complexity : O(n^2) , Aux Space : O(n) ) */
+
+class Solution {
+public:
+    
+    bool canReach(vector<int>& nums , int pos , vector<bool>& dp) 
+       {    
+        
+        bool ans=false;
+        
+        if(pos < nums.size() - 1)
+        { 
+            if(!nums[pos] || dp[pos])
+              return false;
+            
+            dp[pos]=true;
+            
+            if(pos+nums[pos]+1 >= nums.size() )
+              return true;
+                      
+            for(int j=nums[pos];j>0 && !ans;j--)
+             if(!dp[pos+j])   
+              ans=canReach(nums,pos+j,dp);
+        }
+        else
+            return true; 
+        
+        return ans;         
+       }
+    
+    bool canJump(vector<int>& nums) {
+        
+        vector<bool> dp(nums.size(),false);
+        return canReach(nums,0,dp);   
+    }
+};
+
+
+/* Optimized approach (Time Complexity : O(n) , Aux Space : O(1) )
+In this approach we compute the farthest reach , in single traversal of input array . If at any point current index is less than farthest reach then it is not reachable */
+
+class Solution {
+public:
+    
+    bool canJump(vector<int>& nums) {
+        int max_jump = 0;
+        
+        for(int i=0;i<nums.size() ;++i)
+        {
+            if(max_jump < i)
+                return false;
+            max_jump = max(max_jump,i+nums[i]);
+            
+            if(max_jump+2 >nums.size())
+              return true;  
+        }
+        return true;      
+    }
+};
