@@ -1,0 +1,116 @@
+/* This question is an extension of CanJump(I) and requires minimization of number of jumps as well */
+
+/* It can be solved by various methods with varying space and time complexities */
+
+/* DP : Time Complexity : O(n^2) TopDown (iterative) approach Aux Space: O(n) */
+
+class Solution {
+    public int jump(int[] nums) {
+          int n = nums.length;
+        int[] JG = new int[n];
+        JG[0] = 0; // Base case
+        for(int i = 1; i <= nums[0]; i++) { // First jump
+            if(i < n) {
+                JG[i] = 1;
+            }
+        }
+        for(int i = nums[0]+1; i < n; i++) { // Base case
+            JG[i] = Integer.MAX_VALUE;
+        }
+        int a = nums[0];
+        for(int i = a+1; i < n; i++) { // Filling the DP table as discussed above
+            for(int j = i-1; j >= 1; j--) {
+                if(nums[i-j] >= j) { // That's the part where we said above IF jg(i) can be reached from a prior entry
+                    JG[i] = Math.min(JG[i], JG[i-j]+1);
+                }
+            }
+        }
+        return JG[n-1];
+    }
+}
+
+/* DP : Time Complexity : O(n) BottomUp (recursive) approach Aux Space: O(n)  */
+
+class Solution {
+public:
+       void minReach(vector<int>& nums , int pos , vector<int>& dp , int jumps) 
+       {      
+            if(!nums[pos] || (dp[pos]<jumps))
+              return;
+            
+            dp[pos]=jumps;
+                                  
+            for(int j=nums[pos];j>0 ;j--)
+            {
+                if(pos+j+2 > nums.size() )
+                    dp[nums.size()-1] = min(dp[nums.size()-1],jumps+1);
+                else if(dp[pos+j] > jumps)
+                    minReach(nums,pos+j,dp,jumps+1);
+            }       
+       }
+    
+    int jump(vector<int>& nums) {
+    
+      if(nums.size() ==1)
+         return 0; 
+      vector<int> dp(nums.size(),10001);
+      minReach(nums,0,dp,0);
+      return dp[nums.size()-1];  
+    }
+};
+
+
+/* BFS : Time Complexity : O(n) Aux Space: O(n) */
+
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+    
+      if(nums.size() ==1)
+         return 0; 
+      vector<int> visited(nums.size(),10001);
+      visited[0]=0;
+      queue <int> q;
+      q.push(0);
+      while(!q.empty())
+      {
+         int s=q.front();
+         q.pop();
+         for(int j=nums[s];j>0;j--) 
+         {
+             if(s+j+2>nums.size())
+                return visited[s]+1;
+             else if(visited[s+j] == 10001)
+             {   
+                visited[s+j]= visited[s]+1;
+                q.push(s+j); 
+             }    
+         }
+      }    
+      return visited[nums.size()-1];  
+    }
+};
+
+
+/* Greedy : Time Complexity : O(n) Aux Space: O(1) */
+
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int size = nums.size();
+        if(size ==1) return 0;
+        int ladder = nums[0] , currEnd = nums[0];
+        int jump = 1;
+        
+        for(int i=0 ; i< size-1 ; i++)
+        {
+            ladder = max(ladder , nums[i]+i); // Keep track of longest ladder to climb
+            if(i==currEnd) // if we reach the end of the ladder 
+            {
+                jump++;
+                currEnd = ladder ; // set currEnd to the end of longest ladder
+            }
+        }
+        return jump;
+    }
+};
