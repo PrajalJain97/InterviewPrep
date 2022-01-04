@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+using ll = long long;
+
+ll ans=0ll;
+
+void Merge(vector<int> &a,int l,int mid, int r)
+{
+	vector<int> temp;
+	int i=l,j=mid+1;
+	while(i<=mid && j<=r)
+	{
+		if(a[i]<=a[j])
+			temp.push_back(a[i++]);
+		else
+		{
+			temp.push_back(a[j++]);
+			ans += (mid-i+1);
+		}	
+	}
+	while(i<=mid)
+		temp.push_back(a[i++]);
+	while(j<=r)
+		temp.push_back(a[j++]);
+	for(int k=l;k<=r;k++)
+		a[k]=temp[k-l];
+}
+void MergeSort(vector<int> &a,int l,int r)
+{
+	if(l<r)
+	{
+		int mid=(l+r)/2;
+		MergeSort(a,l,mid);
+		MergeSort(a,mid+1,r);
+		Merge(a,l,mid,r);
+	}	
+}
+int main()
+{
+	ios::sync_with_stdio(0); cin.tie(0);
+	int N;
+	cin>>N;
+	if(N<=1)
+	  return 0;
+	vector<int> a(N);
+	for(int i=0;i<N;i++)
+	{
+		cin>>a[i];
+	}
+	MergeSort(a,0,N-1);
+	cout<<ans;
+	return 0;
+}
