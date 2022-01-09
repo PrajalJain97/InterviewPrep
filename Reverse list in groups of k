@@ -1,0 +1,104 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+ 
+ /* Iterative solution */
+class Solution {
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        if(head->next == nullptr || k==1)
+           return head;
+        
+        ListNode *p=nullptr,*c=head,*n=nullptr,*first=nullptr,*last=nullptr;
+        while(c!= nullptr)
+        {
+            int cnt=0;
+            while(cnt<k)
+            {
+                n=c->next;
+                c->next=p;
+                p=c;
+                c=n;
+                cnt++;
+            }
+            if(last == nullptr)
+            {
+               last=head;
+               head=p;
+            }
+            else
+            {
+              last->next=p;
+              last=first;
+            }
+            p=nullptr;
+            first=c;
+            // Check if list has enough nodes before continuing loop
+            cnt=0;
+            while(cnt<k && n!=nullptr)
+            {
+                n=n->next;
+                cnt++;
+            }
+            if(cnt<k)
+            { 
+              last->next=c;  
+              break;
+            }
+        }
+        return head;
+    }
+};
+
+
+/***********************************************************************/
+
+/* Recursive Solution in JAVA */
+class Model{
+	ListNode head;
+	ListNode tail;
+}
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        int count = 0;
+        ListNode cur = head;
+        while(cur!=null && count!=k){
+            count++;
+			//Pointer to the next K group
+            cur = cur.next;
+        }
+		//k equals count so we can reverse
+        if(count == k){
+			//Recursive call to solve the remaining list
+			//cur holds the value of solved lists head
+            cur = reverseKGroup(cur,k);
+			//temp holds the pointer to the head of reversed list
+            ListNode temp = rev(head,null,count);
+			//next will hold pointer to the tail of reverse list where we can simply point cur
+            ListNode next=temp; 
+            while(next.next!=null){
+                next=next.next;
+            }
+            next.next=cur;
+            head=temp;
+        }
+        return head;
+    }
+	//Simple code to reverse list 
+	//Here we can even return Model class
+    private ListNode rev(ListNode head,ListNode pre,int k){
+        if(k==0)return pre;
+        ListNode temp = head.next;
+        head.next=pre;
+        return rev(temp,head,k-1);
+        
+    }
+}
+
