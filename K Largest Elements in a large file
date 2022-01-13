@@ -1,0 +1,39 @@
+class Solution
+{
+    public:
+    //Function to return k largest elements from an array in decreasing order.
+    vector<int> kLargest(int arr[], int n, int k)
+    {
+        // code here
+        if(k==n)
+            return vector<int> (arr, arr + sizeof(arr)/sizeof(int));
+        
+        priority_queue <int, vector<int>, greater<int> > pq;
+        int i;
+        for(i=0;i<k;i++)
+            pq.push(arr[i]);
+        while(i<n)
+        {
+            if(arr[i] > pq.top())
+            {
+                pq.pop();
+                pq.push(arr[i++]);
+            }
+            else
+                i++;
+        }
+        stack<int> s;
+        while(!pq.empty())
+        {
+            s.push(pq.top());
+            pq.pop();
+        }
+        vector<int> ans;
+        while(!s.empty())
+        {
+            ans.push_back(s.top());
+            s.pop();
+        }
+        return ans;
+    }
+};
