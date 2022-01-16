@@ -1,0 +1,31 @@
+class Solution {
+public:
+    
+    int gcd(int a, int b)
+{
+    if (b == 0)
+        return a;
+    return gcd(b, a % b);
+     
+}
+   typedef long long ll;
+   
+    int nthMagicalNumber(int n, int a, int b) {
+       ll mod=1000000007;
+        
+        ll left=min(a,b),right=n*1ll*min(a,b),mid,target;
+        
+         ll lcm=(a*b)/__gcd(a,b);
+        
+        while(left<right){
+            mid=left+(right-left)/2;
+            target=(mid/a)+(mid/b)-(mid/lcm);
+            if(target<n)
+                left=mid+1;
+            else {right=mid;
+                }
+        }
+        return right%mod;
+        
+    }
+};
