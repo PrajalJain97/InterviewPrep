@@ -2,6 +2,7 @@
 
 using namespace std;
 
+// Function to only find length of LCS
 int findLCS(string &a,string &b)
 {
     int n=a.size(),m=b.size();
@@ -24,6 +25,51 @@ int findLCS(string &a,string &b)
         }
     }
     return dp[n%2][m];
+}
+// Function to print LCS along with length
+void printLCS(string &a,string &b)
+{
+    int n=a.size(),m=b.size();
+    if(n==0 || m==0)
+        return ;
+
+    vector< vector<int> > dp(n+1,vector<int>(m+1));
+
+    for(int i=0;i<n+1;i++)
+    {
+        for(int j=0;j<m+1;j++)
+        {
+           if(i==0 || j==0)
+            dp[i][j]=0;
+           else if(a[i-1] == b[j-1])
+            dp[i][j] = dp[i-1][j-1]+1;
+           else
+            dp[i][j] = max(dp[i-1][j],dp[i][j-1]);
+        }
+    }
+    int len=dp[n][m],pos=len-1;
+    char ans[len+1];
+    if(len)
+    {
+      ans[len]='\0';
+      int i=n,j=m;
+      while(i>0 && j>0)
+      {
+         if(dp[i-1][j] == dp[i][j])
+           i--;
+         else if(dp[i][j-1] == dp[i][j])
+           j--;
+         else
+         {
+            ans[pos--]=a[i-1];
+            i--;j--;
+         }
+      }
+      cout<<len<<" "<<ans;
+    }
+    else
+        cout<<"No common subsequence found";
+
 }
 int main()
 {
