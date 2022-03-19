@@ -1,0 +1,26 @@
+/* 
+
+Given an array arr[] denoting heights of N towers and a positive integer K, you have to modify the height of each tower either by increasing or decreasing them by K only once.
+Find out what could be the possible minimum difference of the height of shortest and longest towers after you have modified each tower.
+Note: Assume that height of the tower can be negative.
+
+*/
+
+/* Unique Approach (Hard Problem)  */
+
+int getMinDiff(int arr[], int n, int k) {
+       sort(arr,arr+n);
+       
+       int diff = arr[n-1] - arr[0];
+       int maxNow = arr[n-1] - k; // Maximum after subtracting k from whole array
+       int minNow = arr[0] + k; // Minimum after adding k to whole array
+       int max1 = maxNow; // Temp variable to store curr max
+       int min1 = minNow; // Temp variable to store curr min
+       
+       for(int i = 0; i < n - 1; i++) {
+           max1 = max(maxNow, arr[i] + k);  // Update max if its greater than maxNow and use it to calculate diff , because all bigger elements that lie ahead of it will be be taken into consideration in the next iteration 
+           min1 = min(minNow, arr[i+1] - k); // Update min if its smaller than minNow and use it to calculate diff 
+           diff = min(diff, max1 - min1); // Update diff only if a smaller difference is obtained
+       }
+       return diff;
+   }
