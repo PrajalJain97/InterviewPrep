@@ -94,23 +94,20 @@ public:
 
 /* Greedy : Time Complexity : O(n) Aux Space: O(1) */
 
-class Solution {
-public:
-    int jump(vector<int>& nums) {
-        int size = nums.size();
-        if(size ==1) return 0;
-        int ladder = nums[0] , currEnd = nums[0];
-        int jump = 1;
-        
-        for(int i=0 ; i< size-1 ; i++)
-        {
-            ladder = max(ladder , nums[i]+i); // Keep track of longest ladder to climb
-            if(i==currEnd) // if we reach the end of the ladder 
-            {
-                jump++;
-                currEnd = ladder ; // set currEnd to the end of longest ladder
-            }
-        }
-        return jump;
-    }
-};
+class Solution{
+   static int minJumps(int[] nums){
+       int jump=0;
+   int far=0;
+   int RangeOfOneStep=0;
+   for(int i=0;i<nums.length-1;i++){
+       far=Math.max(far,nums[i]+i);
+       if(i==RangeOfOneStep){
+           jump++;
+           if(RangeOfOneStep==far) return -1;
+           RangeOfOneStep=far;
+           if(RangeOfOneStep>=nums.length-1) break;
+       }
+   }
+   return jump;
+   }
+}
